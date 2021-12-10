@@ -1,13 +1,35 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import Navbar from "react-bootstrap/Navbar";
 import "./App.css";
 import AppRoutes from "./AppRoutes";
 import Nav from "react-bootstrap/Nav";
 import {LinkContainer} from "react-router-bootstrap";
+import { AppContext } from "./lib/contextLib";
+import {Auth} from "aws-amplify";
 
 
 const App = () => {
+  const [isAuthenticating, setIsAuthenticating] = useState(true);
+  const [isAuthenticated, userHasAuthenticated] = useState(false);
+  useEffect(()=> {onLoad();}, [/*no deps*/]
+  )
+
+  async function onLoad() {
+    try{
+      await Auth.currentSession();
+      userHasAuthenticated(true);
+    } catch(e) {
+      if(e !== 'No current user'){
+        alert(e);
+      }
+    }
+    setIsAuthenticating(false);
+  }
+  function handleLogout() {
+    userHasAuthenticated(false);
+  }
   return (
+    !isAuthenticating && (    
     <div className="App container py-3">
       <Navbar collapseOnSelect bg="light" expand="md" className="mb-3">
         <LinkContainer to="/">
@@ -18,17 +40,25 @@ const App = () => {
         <Navbar.Toggle />
         <Navbar.Collapse className="justify-content-end">
           <Nav activeKey={window.location.pathname}>
-            <LinkContainer to="/signup">
-              <Nav.Link >Signup</Nav.Link>
-            </LinkContainer>
-            <LinkContainer to="/login">
-              <Nav.Link >Login</Nav.Link>
-            </LinkContainer>
+          {isAuthenticated ? (
+              <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
+            ) : (
+              <>
+                <LinkContainer to="/signup">
+                  <Nav.Link>Signup</Nav.Link>
+                </LinkContainer>
+                <LinkContainer to="/login">
+                  <Nav.Link>Login</Nav.Link>
+                </LinkContainer>
+              </>
+            )}
           </Nav>
         </Navbar.Collapse>
       </Navbar>
-      <AppRoutes></AppRoutes>
-    </div>
+      <AppContext.Provider value = {{isAuthenticated, userHasAuthenticated}}>
+        <AppRoutes></AppRoutes>
+      </AppContext.Provider>
+    </div>)
   );
 }
 
