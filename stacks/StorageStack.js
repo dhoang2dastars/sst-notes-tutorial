@@ -14,7 +14,7 @@ export default class StorageStack extends sst.Stack {
                 cors: [
                     {
                         maxAge: 3000,
-                        allowedOrigins: ["8"],
+                        allowedOrigins: ["*"],
                         allowedHeaders: ["*"],
                         allowedMethods: ["GET", "PUT", "POST", "DELETE", "HEAD"],
                     },

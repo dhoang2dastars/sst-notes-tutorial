@@ -1,5 +1,5 @@
 import handler from "./util/handler";
-import dynamodb from "./util/dynamodb";
+import dynamoDb from "./util/dynamodb";
 
 export const main = handler(async (event)=> {
     const params = {
@@ -9,7 +9,9 @@ export const main = handler(async (event)=> {
             noteId: event.pathParameters.id,
         },
     };
+    console.log("running delete in lambda");
 
-    await dynamodb.delete(params);
+    const res = await dynamoDb.delete(params);
+    console.log(res);
     return {status: true};
 });

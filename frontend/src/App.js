@@ -6,13 +6,15 @@ import Nav from "react-bootstrap/Nav";
 import {LinkContainer} from "react-router-bootstrap";
 import { AppContext } from "./lib/contextLib";
 import {Auth} from "aws-amplify";
+import { useNavigate } from "react-router-dom";
+import { onError } from "./lib/errorLib";
 
 
 const App = () => {
+  const navigate = useNavigate();
   const [isAuthenticating, setIsAuthenticating] = useState(true);
   const [isAuthenticated, userHasAuthenticated] = useState(false);
-  useEffect(()=> {onLoad();}, [/*no deps*/]
-  )
+  useEffect(()=> {onLoad();}, [/*no deps*/])
 
   async function onLoad() {
     try{
@@ -20,13 +22,15 @@ const App = () => {
       userHasAuthenticated(true);
     } catch(e) {
       if(e !== 'No current user'){
-        alert(e);
+        onError(e);
       }
     }
     setIsAuthenticating(false);
   }
-  function handleLogout() {
+  async function handleLogout() {
+    await Auth.signOut();
     userHasAuthenticated(false);
+    navigate("/login");
   }
   return (
     !isAuthenticating && (    
@@ -41,7 +45,12 @@ const App = () => {
         <Navbar.Collapse className="justify-content-end">
           <Nav activeKey={window.location.pathname}>
           {isAuthenticated ? (
+            <>
+              <LinkContainer to="/settings">
+                  <Nav.Link>Settings</Nav.Link>
+              </LinkContainer>
               <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
+            </>
             ) : (
               <>
                 <LinkContainer to="/signup">
