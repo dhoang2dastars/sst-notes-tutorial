@@ -3,7 +3,7 @@ import Form from "react-bootstrap/Form";
 import {Auth} from 'aws-amplify';
 import "./Login.css";
 import { useAppContext } from "../lib/contextLib";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import LoaderButton from "../components/LoaderButton";
 import { onError } from "../lib/errorLib";
 import useFormFields from "../lib/hooksLib"
@@ -11,6 +11,7 @@ import useFormFields from "../lib/hooksLib"
 
 const Login = () => {
     const navigate = useNavigate();
+    const location = useLocation();
     const {userHasAuthenticated} = useAppContext();
     // const [email, setEmail] = useState("");
     // const [password, setPassword] = useState("");
@@ -30,7 +31,9 @@ const Login = () => {
         try {
             await Auth.signIn(fields.email, fields.password);
             userHasAuthenticated(true);
-            navigate('/');
+            console.log(location)
+            //TODO: refactor to let the wrapper UnauthorizedRoute handle the renavigation 
+            // location.state ? navigate(location.state.from.pathname) : navigate("/");
         } catch(e) {
             if(e.name === "UserNotConfirmedException"){
                 navigate("/signup", {state:{email: fields.email}})
@@ -44,6 +47,8 @@ const Login = () => {
     return (
         <div className="Login">
             <Form onSubmit={handleSubmit}>
+                {console.log(location.state)}
+                {location.state ? <p>You must be logged in to access this page.</p> : false }
                 <Form.Group size="lg" controlId="email">
                     <Form.Label>Email</Form.Label>
                     <Form.Control

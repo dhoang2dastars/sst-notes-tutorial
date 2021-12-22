@@ -7,6 +7,8 @@ import Signup from "./containers/Signup";
 import NewNote from "./containers/NewNote";
 import Notes from "./containers/Notes";
 import Settings from "./containers/Settings";
+import AuthenticatedRoute from "./components/AuthenticatedRoute";
+import UnauthenticatedRoute from "./components/UnauthenticatedRoute";
 
 
 const AppRoutes = () => {
@@ -14,11 +16,11 @@ const AppRoutes = () => {
             <Routes>
                 <Route path="/" element={<Home />}></Route>
                 <Route path="*" element={<NotFound/>}></Route>
-                <Route path="/login" element={<Login/>}></Route>
-                <Route path="/signup" element={<Signup />}></Route>
-                <Route exact path="/notes/new" element={<NewNote/>}></Route>
-                <Route exact path="/notes/:id" element={<Notes />}></Route>
-                <Route path="/settings" element={<Settings />}></Route>
+                <Route path="/login" element={<UnauthenticatedRoute> <Login /> </UnauthenticatedRoute>}></Route>
+                <Route path="/signup" element={<UnauthenticatedRoute> <Signup /> </UnauthenticatedRoute>}></Route>
+                <Route exact path="/notes/new" element={<AuthenticatedRoute> <NewNote/> </AuthenticatedRoute>}></Route>
+                <Route exact path="/notes/:id" element={<AuthenticatedRoute> <Notes /> </AuthenticatedRoute>}></Route>
+                <Route path="/settings" element={<AuthenticatedRoute><Settings /></AuthenticatedRoute>}></Route>
             </Routes>
     );
 }

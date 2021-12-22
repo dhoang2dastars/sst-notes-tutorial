@@ -1,11 +1,9 @@
-import React, {useState} from 'React';
+import React, {useState} from 'react';
 import Form from 'react-bootstrap/Form';
 import {CardElement, useStripe, useElements} from '@stripe/react-stripe-js';
 import LoaderButton from './LoaderButton';
 import useFormFields from '../lib/hooksLib';
 import "./BillingForm.css";
-import FormGroup from 'react-bootstrap/esm/FormGroup';
-
 
 const BillingForm =({isLoading, onSubmit }) => {
     const stripe = useStripe();
@@ -26,11 +24,15 @@ const BillingForm =({isLoading, onSubmit }) => {
                             &&isCardComplete);
 
     const handleSubmitClick = async (event) => {
+        console.log("interal button clicked");
         event.preventDefault();
-        if(stripe || elements) {
-            //essentially if stripe.js has not loaded yet, disables the submission
-            return;
-        }
+        //BUG: code does not work. It indefinitely blocks. Disabling it makes everything work again. 
+        // if(stripe || elements) {
+        //     //essentially if stripe.js has not loaded yet, disables the submission
+        //     console.log(stripe)
+        //     console.log("stripe hasn't loaded yet")
+        //     return;
+        // }
         setIsProcessing(true);
         const cardElement = elements.getElement(CardElement);
         const {token, error} = await stripe.createToken(cardElement);
@@ -57,7 +59,7 @@ const BillingForm =({isLoading, onSubmit }) => {
                     type="text"
                     value={fields.name}
                     onChange={handleFieldChange}
-                    placeHolder="Name on the card"
+                    placeholder="Name on the card"
                 />
             </Form.Group>
             <Form.Label>Credit Card Info</Form.Label>

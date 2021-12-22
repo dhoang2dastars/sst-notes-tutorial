@@ -19,15 +19,19 @@ const App = () => {
   async function onLoad() {
     try{
       await Auth.currentSession();
+
       userHasAuthenticated(true);
     } catch(e) {
       if(e !== 'No current user'){
         onError(e);
       }
     }
+    console.log('balls', isAuthenticated)
     setIsAuthenticating(false);
   }
+  //TODO: fix the redirect showing in the URl after logging out when viewing a note 
   async function handleLogout() {
+    
     await Auth.signOut();
     userHasAuthenticated(false);
     navigate("/login");
