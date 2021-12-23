@@ -1,5 +1,5 @@
 import React from "react";
-import {BrowserRouter, Routes, Route} from 'react-router-dom';
+import { Routes, Route} from 'react-router-dom';
 import Home from "./containers/Home";
 import NotFound from "./containers/NotFound";
 import Login from "./containers/Login";

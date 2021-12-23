@@ -6,7 +6,6 @@ import Form from "react-bootstrap/Form";
 import LoaderButton from "../components/LoaderButton";
 import config from "../config";
 import "./Notes.css";
-import { filenameToContentType } from '@aws-amplify/core';
 import { s3Upload } from '../lib/awsLib';
 
 

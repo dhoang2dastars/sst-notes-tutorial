@@ -1,5 +1,5 @@
-import React, { cloneElement } from "react";
-import { Route, Navigate } from "react-router-dom";
+import React from "react";
+import {Navigate } from "react-router-dom";
 import { useAppContext } from "../lib/contextLib";
 //---------------------------------------------
 
@@ -19,13 +19,10 @@ export default function UnauthenticatedRoute(props) {
     const redirect = querystring("redirect");
 
 
-    const { children, ...rest } = props;
     const { isAuthenticated } = useAppContext();
 
     return (
         <div>
-        {console.log(props)}
-        {console.log(children)}
         {!isAuthenticated ? (
             props.children
         ) : (

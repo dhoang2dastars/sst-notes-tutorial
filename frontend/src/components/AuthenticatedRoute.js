@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, useLocation, Navigate} from "react-router-dom";
+import { useLocation, Navigate} from "react-router-dom";
 import { useAppContext } from "../lib/contextLib";
 
 //Route for fully authenticated users

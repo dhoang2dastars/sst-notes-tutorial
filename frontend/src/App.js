@@ -14,7 +14,7 @@ const App = () => {
   const navigate = useNavigate();
   const [isAuthenticating, setIsAuthenticating] = useState(true);
   const [isAuthenticated, userHasAuthenticated] = useState(false);
-  useEffect(()=> {onLoad();}, [/*no deps*/])
+  useEffect(()=> {onLoad();})
 
   async function onLoad() {
     try{
